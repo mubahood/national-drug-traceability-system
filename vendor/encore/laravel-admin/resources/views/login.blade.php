@@ -246,10 +246,9 @@
                     <a href="javascript:;" class="btn btn-link btn-lg w-100">Forgot your password?</a>
 
 
- 
+
                     <p class="text-center mt-4 mb-0"><b>Partners</b></p>
-                    <center><img class="img-fluid text-center" src="{{ url('assets/logos.png') }}" width="70%">
-                    </center>
+                    <p class="text-center">Partner 1, Partner 2, Partner 3,</p>
 
                 </div>
 
@@ -257,14 +256,14 @@
                     <p class="nav d-block fs-xs text-center text-xl-start pb-2 mb-0">
                         All rights reserved. &copy; 2022
                         <a class="nav-link d-inline-block p-0 text-primary" href="javascript:;" target="_blank"
-                            rel="noopener">UWA</a>
+                            rel="noopener">Uganda National Drug Authority</a>
                     </p>
                 </div>
             </div>
 
             <!-- Background -->
             <div class="position-absolute top-0 end-0 w-50 h-100 bg-position-center bg-repeat-0 bg-size-cover d-none d-md-block"
-                style="background-image: url({{ url('assets/bg/' . rand(1, 16) . '-min.jpg') }});
+                style="background-image: url({{ url('assets/bg/bg-1-min.jpeg') }});
                 border: 15px solid white;
                 border-radius:40px;
                 background-color: #13502f;

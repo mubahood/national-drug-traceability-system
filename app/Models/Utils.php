@@ -57,6 +57,42 @@ class Utils  extends Model
     }
     public static function system_boot($u)
     {
+
+        /* $link = $_SERVER['DOCUMENT_ROOT'] . '/data.csv';
+        $csvFile = file($link);
+        $data = [];
+        echo "<pre>";
+        $done_first = false;
+        foreach ($csvFile as $_line) {
+            if (!$done_first) {
+                $done_first = true;
+                continue;
+            }
+
+            $line = str_getcsv($_line);
+
+            $cat =  new DrugCategory();
+            $cat->nda_registration_number = isset($line[0]) ? $line[0] : "";
+            $cat->license_holder = isset($line[1]) ? $line[1] : "";
+            $cat->local_technical_representative = isset($line[2]) ? $line[2] : "";
+            $cat->name_of_drug = isset($line[3]) ? $line[3] : "";
+            $cat->generic_name_of_drug = isset($line[4]) ? $line[4] : "";
+            $cat->strength_of_drug = isset($line[5]) ? $line[5] : "";
+            $cat->manufacturer = isset($line[6]) ? $line[6] : "";
+            $cat->country_of_manufacturer = isset($line[7]) ? $line[7] : "";
+            $cat->dosage_form = isset($line[8]) ? $line[8] : "";
+            $cat->registration_date = isset($line[9]) ? $line[9] : "";
+            $cat->save();
+        }
+        die("done"); 
+
+
+        $filedata = file_get_contents($link);
+        $filedata = array_map('str_getcsv', file($filedata));
+        echo "<pre>";
+        print_r($filedata);
+
+        die("romina");*/
         $cases = CaseModel::where([
             'case_number' => null
         ])->get();
