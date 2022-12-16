@@ -26,6 +26,10 @@ Route::group([
     $router->resource('p-as', PaController::class);
     $router->resource('offences', OffenceController::class);
     $router->resource('conservation-areas', ConservationAreaController::class);
+    $router->resource('drug-stocks', DrugStockController::class);
+    $router->resource('district-drug-stocks', DistrictDrugStockController::class);
+    $router->resource('health-centres', HealthCentreController::class);
+    $router->resource('health-centre-drug-stocks', HealthCentreDrugStockController::class);
 
 
     /* N.D.A */

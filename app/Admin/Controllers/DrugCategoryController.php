@@ -15,7 +15,7 @@ class DrugCategoryController extends AdminController
      *
      * @var string
      */
-    protected $title = 'DrugCategory';
+    protected $title = 'Drug categories';
 
     /**
      * Make a grid builder.
@@ -25,14 +25,13 @@ class DrugCategoryController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new DrugCategory());
-
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('nda_registration_number', __('Nda registration number'));
-        $grid->column('license_holder', __('License holder'));
+        $grid->quickSearch('name_of_drug')->placeholder('Search...');
+        $grid->disableBatchActions();
+        $grid->column('id', __('ID'))->sortable();
         $grid->column('name_of_drug', __('Name of drug'));
         $grid->column('generic_name_of_drug', __('Generic name of drug'));
+        $grid->column('nda_registration_number', __('NDA registration number'));
+        $grid->column('license_holder', __('License holder'));
         $grid->column('strength_of_drug', __('Strength of drug'));
         $grid->column('manufacturer', __('Manufacturer'));
         $grid->column('country_of_manufacturer', __('Country of manufacturer'));
@@ -77,15 +76,15 @@ class DrugCategoryController extends AdminController
     {
         $form = new Form(new DrugCategory());
 
-        $form->textarea('nda_registration_number', __('Nda registration number'));
-        $form->textarea('license_holder', __('License holder'));
-        $form->textarea('name_of_drug', __('Name of drug'));
-        $form->textarea('generic_name_of_drug', __('Generic name of drug'));
-        $form->textarea('strength_of_drug', __('Strength of drug'));
-        $form->textarea('manufacturer', __('Manufacturer'));
-        $form->textarea('country_of_manufacturer', __('Country of manufacturer'));
-        $form->textarea('dosage_form', __('Dosage form'));
-        $form->textarea('registration_date', __('Registration date'));
+        $form->text('nda_registration_number', __('Nda registration number'))->rules('required');
+        $form->text('license_holder', __('License holder'))->rules('required');
+        $form->text('name_of_drug', __('Name of drug'))->rules('required');
+        $form->text('generic_name_of_drug', __('Generic name of drug'))->rules('required');
+        $form->text('strength_of_drug', __('Strength of drug'))->rules('required');
+        $form->text('manufacturer', __('Manufacturer'))->rules('required');
+        $form->text('country_of_manufacturer', __('Country of manufacturer'))->rules('required');
+        $form->text('dosage_form', __('Dosage form'))->rules('required');
+        $form->date('registration_date', __('Registration date'))->rules('required');
 
         return $form;
     }

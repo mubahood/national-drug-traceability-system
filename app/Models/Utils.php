@@ -58,7 +58,8 @@ class Utils  extends Model
     public static function system_boot($u)
     {
 
-        /* $link = $_SERVER['DOCUMENT_ROOT'] . '/data.csv';
+        /*
+        $link = $_SERVER['DOCUMENT_ROOT'] . '/data.csv';
         $csvFile = file($link);
         $data = [];
         echo "<pre>";
@@ -83,8 +84,9 @@ class Utils  extends Model
             $cat->dosage_form = isset($line[8]) ? $line[8] : "";
             $cat->registration_date = isset($line[9]) ? $line[9] : "";
             $cat->save();
+            echo $cat->id."<hr>";
         }
-        die("done"); 
+        die("done"); *//*
 
 
         $filedata = file_get_contents($link);
@@ -340,6 +342,27 @@ class Utils  extends Model
 
 
 
+    public static function quantity_convertor($qty, $type)
+    {
+        if ($type == 'Solid') {
+            $val = $qty;
+            if ($qty > 1000000) {
+                $val = $qty / 1000000;
+                return number_format($val) . "kg";
+            } else if ($qty > 1000) {
+                $val = $qty / 1000;
+                return number_format($val) . "g";
+            }
+            return number_format($val) . "mg";
+        } else  if ($type == 'Liquid') {
+            $val = $qty;
+            if ($qty > 1000) {
+                $val = $qty / 1000;
+                return number_format($val) . "L";
+            }
+            return number_format($val) . "ml";
+        }
+    }
     public static function my_date($t)
     {
         $c = Carbon::parse($t);

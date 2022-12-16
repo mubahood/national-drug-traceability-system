@@ -8,15 +8,27 @@ php artisan make:migration create_offences_table
 php artisan make:migration create_case_has_offences_table
 php artisan make:migration create_conservation_areas_table
 php artisan make:migration create_drug_categories_table
+php artisan make:migration create_drug_stocks_table
+php artisan make:migration create_district_drug_stocks_table
+php artisan make:migration create_health_centre_drug_stocks_table
+php artisan make:migration create_health_centres_table
 
 
+php artisan make:migration add_more --table=drug_stocks
+php artisan make:migration add_dist --table=health_centre_drug_stocks
+
+
+php artisan make:model HealthCentreDrugStock
+php artisan make:model HealthCentre
 php artisan make:model CaseCuspectsComment
+php artisan make:model DistrictDrugStock
 php artisan make:model DrugCategory
 php artisan make:model CaseSuspect
 php artisan make:model Exhibit
 php artisan make:model CaseModel
 php artisan make:model PA
 php artisan make:model Offence
+php artisan make:model DrugStock
 php artisan make:model Location
 php artisan make:model CaseHasOffence
 php artisan make:model ConservationArea
@@ -30,6 +42,10 @@ php artisan admin:make OffenceController --model=App\\Models\\Offence
 php artisan admin:make OffenceController --model=App\\Models\\CaseHasOffence
 php artisan admin:make ConservationAreaController --model=App\\Models\\ConservationArea
 php artisan admin:make DrugCategoryController --model=App\\Models\\DrugCategory
+php artisan admin:make DrugStockController --model=App\\Models\\DrugStock
+php artisan admin:make DistrictDrugStockController --model=App\\Models\\DistrictDrugStock
+php artisan admin:make HealthCentreController --model=App\\Models\\HealthCentre
+php artisan admin:make HealthCentreDrugStockController --model=App\\Models\\HealthCentreDrugStock
 
 		
 -- 	
