@@ -73,7 +73,7 @@ class PatientDrugRecordController extends AdminController
     protected function form()
     {
         $rec = new PatientDrugRecord();
-        $rec->is_new_patient = 'Yes';
+        $rec->is_new_patient = 'No';
         $rec->patient_name = 'Bwambale';
         $rec->patient_sex = 'Male';
         $rec->patient_address = 'Bwera, Kasese';

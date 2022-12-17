@@ -70,4 +70,8 @@ class HealthCentreDrugStock extends Model
     {
         return $this->belongsTo(DrugCategory::class);
     }
+    public function drug_stock()
+    {
+        return $this->belongsTo(DrugStock::class);
+    }
 }
