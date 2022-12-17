@@ -12,12 +12,17 @@ php artisan make:migration create_drug_stocks_table
 php artisan make:migration create_district_drug_stocks_table
 php artisan make:migration create_health_centre_drug_stocks_table
 php artisan make:migration create_health_centres_table
+php artisan make:migration create_patients_table
+php artisan make:migration create_patient_drug_records_table
 
 
 php artisan make:migration add_more --table=drug_stocks
 php artisan make:migration add_dist --table=health_centre_drug_stocks
+php artisan make:migration add_health --table=patient_drug_records
 
 
+php artisan make:model PatientDrugRecord
+php artisan make:model Patient
 php artisan make:model HealthCentreDrugStock
 php artisan make:model HealthCentre
 php artisan make:model CaseCuspectsComment
@@ -46,6 +51,8 @@ php artisan admin:make DrugStockController --model=App\\Models\\DrugStock
 php artisan admin:make DistrictDrugStockController --model=App\\Models\\DistrictDrugStock
 php artisan admin:make HealthCentreController --model=App\\Models\\HealthCentre
 php artisan admin:make HealthCentreDrugStockController --model=App\\Models\\HealthCentreDrugStock
+php artisan admin:make PatientController --model=App\\Models\\Patient
+php artisan admin:make PatientDrugRecordController --model=App\\Models\\PatientDrugRecord
 
 		
 -- 	

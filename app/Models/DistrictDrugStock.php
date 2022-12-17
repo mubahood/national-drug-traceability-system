@@ -54,7 +54,7 @@ class DistrictDrugStock extends Model
 
         return $m;
     }
-     
+
     public   function drug_category()
     {
         return $this->belongsTo(DrugCategory::class);
@@ -71,9 +71,8 @@ class DistrictDrugStock extends Model
         return Utils::quantity_convertor($this->current_quantity, $this->drug_stock->drug_state);
     }
 
-    
-    protected $appends = [ 
-        'current_quantity_text', 
-    ];
 
+    protected $appends = [
+        'current_quantity_text',
+    ];
 }

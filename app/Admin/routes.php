@@ -30,7 +30,8 @@ Route::group([
     $router->resource('district-drug-stocks', DistrictDrugStockController::class);
     $router->resource('health-centres', HealthCentreController::class);
     $router->resource('health-centre-drug-stocks', HealthCentreDrugStockController::class);
-
+    $router->resource('patients', PatientController::class);
+    $router->resource('patient-drug-records', PatientDrugRecordController::class);
 
     /* N.D.A */
     $router->resource('drug-categories', DrugCategoryController::class);

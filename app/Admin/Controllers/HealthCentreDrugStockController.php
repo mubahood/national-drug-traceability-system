@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\DistrictDrugStock;
+use App\Models\HealthCentre;
 use App\Models\HealthCentreDrugStock;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -17,7 +18,7 @@ class HealthCentreDrugStockController extends AdminController
      *
      * @var string
      */
-    protected $title = 'HealthCentreDrugStock';
+    protected $title = 'Health centre drug stocks';
 
     /**
      * Make a grid builder.
@@ -73,14 +74,28 @@ class HealthCentreDrugStockController extends AdminController
      */
     protected function form()
     {
+
+        /* $data = new HealthCentreDrugStock();
+        $data->district_drug_stock_id = 1;
+        $data->created_by = Auth::user()->id;
+        $data->health_centre_id = 1;
+        $data->original_quantity_temp = 2;
+        $data->save();
+ */
+
         $form = new Form(new HealthCentreDrugStock());
         $stocks = [];
         foreach (DistrictDrugStock::all() as $stock) {
             if ($stock->current_quantity < 1) {
                 continue;
             }
-            $stocks[$stock->id] = $stock->drug_category->name_of_drug . " - Batch #" .
+            $stocks[$stock->id] = "$stock->id. " . $stock->drug_category->name_of_drug . " - Batch #" .
                 $stock->batch_number . ", Available Quantity: " . $stock->current_quantity_text;
+        }
+
+        $centres = [];
+        foreach (HealthCentre::all() as $item) {
+            $centres[$item->id] = "$item->id " . $item->name;
         }
 
         $form->select('district_drug_stock_id', 'Drug stock')
@@ -88,9 +103,14 @@ class HealthCentreDrugStockController extends AdminController
             ->rules('required');
 
         $form->hidden('created_by', __('Created by'))->default(Auth::user()->id);
-        $form->number('health_centre_id', __('Health centre id'));
-        $form->number('original_quantity', __('Original quantity'));
-        $form->number('current_quantity', __('Current quantity'));
+        $form->select('health_centre_id', 'Health centre')
+            ->options($centres)
+            ->rules('required');
+
+        $form->divider();
+        $form->decimal('original_quantity_temp', 'Drug quantity (in Killograms for solids, in Litters for Liquids)')
+            ->rules('required');
+
 
         return $form;
     }
