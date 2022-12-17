@@ -61,9 +61,29 @@ class PatientDrugRecord extends Model
                 die("Health Centre Stock not found.");
             }
 
-            
-            ($HealthCentreDrugStock->drug_stock->drug_packaging_unit_quantity*);
+
+            $m->quantity =  ($HealthCentreDrugStock->drug_stock->drug_packaging_unit_quantity * $m->quantity);
+            if ($m->quantity > $HealthCentreDrugStock->current_quantity) {
+                die("Failed because of insufficient amount of drugs available.");
+            }
+
+            $HealthCentreDrugStock->current_quantity = $HealthCentreDrugStock->current_quantity - $m->quantity;
+
+            dd($m-created_by);
+            $m->district_id = $HealthCentreDrugStock->district_id;
+            dd($HealthCentreDrugStock);
             dd();
+
+            /* 
+            	patient_id	drug_category_id	drug_stock_id	health_centre_id	district_drug_stock_id	health_centre_drug_stock_id	quantity	
+
+            
+            
+            */
+            $HealthCentreDrugStock->save();
+
+
+            //if($m->quantity <)
 
 
             dd($HealthCentreDrugStock);
