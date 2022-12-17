@@ -65,8 +65,20 @@ class HealthCentreController extends AdminController
     {
         $form = new Form(new HealthCentre());
 
-        $form->number('district_id', __('District id'));
-        $form->textarea('name', __('Name'));
+
+        $district_ajax_url = url(
+            '/api/ajax?'
+                . "&search_by_1=name"
+                . "&search_by_2=id"
+                . "&query_parent=0"
+                . "&model=Location"
+        );
+        $form->select('district_id', 'Select District')
+            ->ajax($district_ajax_url)
+            ->rules('required');
+
+   
+        $form->textarea('name', __('Health cente name'));
         $form->textarea('details', __('Details'));
 
         return $form;

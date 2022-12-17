@@ -79,9 +79,8 @@ class HealthCentreDrugStockController extends AdminController
             if ($stock->current_quantity < 1) {
                 continue;
             }
-            dd($stock->current_quantity);
             $stocks[$stock->id] = $stock->drug_category->name_of_drug . " - Batch #" .
-                $stock->batch_number . ", Available Quantity: HealthCentreDrugStock" . $stock->current_quantity_text;
+                $stock->batch_number . ", Available Quantity: " . $stock->current_quantity_text;
         }
 
         $form->select('district_drug_stock_id', 'Drug stock')

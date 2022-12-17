@@ -60,10 +60,15 @@ class DistrictDrugStock extends Model
         return $this->belongsTo(DrugCategory::class);
     }
 
+    public   function drug_stock()
+    {
+        return $this->belongsTo(DrugStock::class);
+    }
+
 
     public function getCurrentQuantityTextAttribute()
     {
-        return  Utils::quantity_convertor($this->current_quantity, $this->drug_state);
+        return Utils::quantity_convertor($this->current_quantity, $this->drug_stock->drug_state);
     }
 
     
