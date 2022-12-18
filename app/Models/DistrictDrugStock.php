@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -55,6 +56,11 @@ class DistrictDrugStock extends Model
         return $m;
     }
 
+    public   function district()
+    {
+        return $this->belongsTo(Location::class,'district_id');
+    }
+
     public   function drug_category()
     {
         return $this->belongsTo(DrugCategory::class);
@@ -63,6 +69,11 @@ class DistrictDrugStock extends Model
     public   function drug_stock()
     {
         return $this->belongsTo(DrugStock::class);
+    }
+    
+    public   function creator()
+    {
+        return $this->belongsTo(Administrator::class,'created_by');
     }
 
 

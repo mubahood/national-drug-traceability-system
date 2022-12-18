@@ -47,6 +47,11 @@ class PatientDrugRecord extends Model
                 }
             }
 
+            if($p == null){
+                die('Patient not found.');
+            }
+            $m->patient_id = $p->id;
+
             unset($m->is_new_patient);
             unset($m->patient_name);
             unset($m->patient_sex);
@@ -61,32 +66,23 @@ class PatientDrugRecord extends Model
                 die("Health Centre Stock not found.");
             }
 
+
+            $m->quantity =  ($HealthCentreDrugStock->drug_stock->drug_packaging_unit_quantity * $m->quantity);
+            if ($m->quantity > $HealthCentreDrugStock->current_quantity) {
+                die("Failed because of insufficient amount of drugs available.");
+            }
+
+            $HealthCentreDrugStock->current_quantity = $HealthCentreDrugStock->current_quantity - $m->quantity;
             
-            ($HealthCentreDrugStock->drug_stock->drug_packaging_unit_quantity*);
-            dd();
+            $m->drug_category_id = $HealthCentreDrugStock->drug_stock->drug_category_id;
+            $m->drug_stock_id = $HealthCentreDrugStock->drug_stock->id;
+            $m->district_id = $HealthCentreDrugStock->district_id;
+            $m->health_centre_id = $HealthCentreDrugStock->health_centre_id;
+            $m->district_drug_stock_id = $HealthCentreDrugStock->district_drug_stock_id;
+            $m->health_centre_drug_stock_id = $HealthCentreDrugStock->id;
+            $HealthCentreDrugStock->save();
 
-
-            dd($HealthCentreDrugStock);
-            /* 
-                "id" => 1
-    "created_at" => "2022-12-17 09:32:30"
-    "updated_at" => "2022-12-17 09:32:30"
-    "drug_category_id" => 289
-    "drug_stock_id" => 1
-    "district_id" => 88
-    "created_by" => 11
-    "health_centre_id" => 1
-    "original_quantity" => 2000000
-    "current_quantity" => 2000000
-    "district_drug_stock_id" => 1
-            */
-
-
-            $rec->health_centre_drug_stock_id = 1;
-            $rec->quantity = 5;
-
-
-            die("One love.");
+            return $m;
         });
     }
 }
