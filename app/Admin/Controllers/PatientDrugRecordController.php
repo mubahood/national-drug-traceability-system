@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Auth;
 
 class PatientDrugRecordController extends AdminController
 {
@@ -72,18 +73,19 @@ class PatientDrugRecordController extends AdminController
      */
     protected function form()
     {
-        $rec = new PatientDrugRecord();
-        $rec->is_new_patient = 'No';
-        $rec->patient_name = 'Bwambale';
-        $rec->patient_sex = 'Male';
-        $rec->patient_address = 'Bwera, Kasese';
-        $rec->patient_phone_number = '0783204665';
-        $rec->nin = '1400019201011';
-        $rec->fingerprint = '1400019201011';
-        $rec->patient_district_id = 88;
-        $rec->health_centre_drug_stock_id = 1;
-        $rec->quantity = 5;
-        $rec->save();
+        // $rec = new PatientDrugRecord();
+        // $rec->is_new_patient = 'No';
+        // $rec->patient_name = 'Bwambale';
+        // $rec->patient_sex = 'Male';
+        // $rec->patient_address = 'Bwera, Kasese';
+        // $rec->patient_phone_number = '0783204665';
+        // $rec->nin = '1400019201011';
+        // $rec->fingerprint = '1400019201011';
+        // $rec->patient_district_id = 88;
+        // $rec->health_centre_drug_stock_id = 1;
+        // $rec->quantity = 5;
+        // $rec->created_by = Auth::user();
+        // $rec->save();
 
         $form = new Form(new PatientDrugRecord());
 
@@ -95,6 +97,9 @@ class PatientDrugRecordController extends AdminController
             $stocks[$stock->id] = "$stock->id. " . $stock->drug_category->name_of_drug . " - Batch #" .
                 $stock->batch_number . ", Available Quantity: " . $stock->current_quantity_text;
         }
+        
+
+        $form->hidden('created_by')->default(Auth::user()->id);
 
 
         $form->radio('is_new_patient', 'Is new patient?')
@@ -109,7 +114,7 @@ class PatientDrugRecordController extends AdminController
                     'Female' => ' Female',
                 ])->rules('required');
 
-                $f->radio('patient_address', 'Patient address')
+                $f->text('patient_address', 'Patient address')
                     ->rules('required');
 
                 $f->text('patient_phone_number', 'Phone number')
