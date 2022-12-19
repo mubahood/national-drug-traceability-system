@@ -74,4 +74,13 @@ class HealthCentreDrugStock extends Model
     {
         return $this->belongsTo(DrugStock::class);
     }
+    public function district()
+    {
+        return $this->belongsTo(Location::class, 'district_id');
+    } 
+
+    public function health_centre()
+    { 
+        return $this->belongsTo(HealthCentre::class, 'health_centre_id');
+    } 
 }

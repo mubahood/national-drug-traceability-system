@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,7 +48,7 @@ class PatientDrugRecord extends Model
                 }
             }
 
-            if($p == null){
+            if ($p == null) {
                 die('Patient not found.');
             }
             $m->patient_id = $p->id;
@@ -73,7 +74,7 @@ class PatientDrugRecord extends Model
             }
 
             $HealthCentreDrugStock->current_quantity = $HealthCentreDrugStock->current_quantity - $m->quantity;
-            
+
             $m->drug_category_id = $HealthCentreDrugStock->drug_stock->drug_category_id;
             $m->drug_stock_id = $HealthCentreDrugStock->drug_stock->id;
             $m->district_id = $HealthCentreDrugStock->district_id;
@@ -84,5 +85,39 @@ class PatientDrugRecord extends Model
 
             return $m;
         });
+    }
+
+
+    public function drug_category()
+    {
+        return $this->belongsTo(DrugCategory::class);
+    }
+    public function drug_stock()
+    {
+        return $this->belongsTo(DrugStock::class);
+    }
+    public function district()
+    {
+        return $this->belongsTo(Location::class, 'district_id');
+    }
+
+    public function health_centre()
+    {
+        return $this->belongsTo(HealthCentre::class, 'health_centre_id');
+    }
+
+    public   function creator()
+    {
+        return $this->belongsTo(Administrator::class, 'created_by');
+    }
+
+    public   function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+
+    public   function district_drug_stock()
+    {
+        return $this->belongsTo(DistrictDrugStock::class);
     }
 }

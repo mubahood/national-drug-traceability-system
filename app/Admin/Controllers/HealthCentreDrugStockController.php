@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\DistrictDrugStock;
 use App\Models\HealthCentre;
 use App\Models\HealthCentreDrugStock;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -28,17 +29,43 @@ class HealthCentreDrugStockController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new HealthCentreDrugStock());
+        $grid->disableActions();
+        $grid->disableCreateButton();
+        $grid->disableBatchActions();
+        $grid->disableExport();
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('drug_category_id', __('Drug category id'));
-        $grid->column('drug_stock_id', __('Drug stock id'));
-        $grid->column('district_id', __('District id'));
-        $grid->column('created_by', __('Created by'));
-        $grid->column('health_centre_id', __('Health centre id'));
-        $grid->column('original_quantity', __('Original quantity'));
-        $grid->column('current_quantity', __('Current quantity'));
+
+        $grid->column('created_at', __('Date'))->display(function ($t) {
+            return Utils::my_date($t);
+        })->sortable();
+
+        $grid->column('district_id', __('District'))->display(function ($t) {
+            return $this->district->name;
+        })->sortable();
+
+
+        $grid->column('health_centre_id', __('Health centre'))
+            ->display(function () {
+                return $this->health_centre->name;
+            })->sortable();
+
+        $grid->column('drug_category_id', __('Drug'))->display(function ($t) {
+            return $this->drug_category->name_of_drug;
+        })->sortable();
+
+        $grid->column('drug_stock_id', __('Batch'))->display(function ($t) {
+            return $this->drug_stock->batch_number;
+        })->sortable();
+
+        $grid->column('original_quantity', __('Original quantity'))
+            ->display(function ($t) {
+                return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
+            })->sortable();
+
+        $grid->column('current_quantity', __('Current quantity'))
+            ->display(function ($t) {
+                return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
+            })->sortable();
 
         return $grid;
     }
@@ -102,7 +129,6 @@ class HealthCentreDrugStockController extends AdminController
             ->options($stocks)
             ->rules('required');
 
-        $form->hidden('created_by', __('Created by'))->default(Auth::user()->id);
         $form->select('health_centre_id', 'Health centre')
             ->options($centres)
             ->rules('required');
@@ -111,6 +137,7 @@ class HealthCentreDrugStockController extends AdminController
         $form->decimal('original_quantity_temp', 'Drug quantity (in Killograms for solids, in Litters for Liquids)')
             ->rules('required');
 
+        $form->hidden('created_by', __('Created by'))->default(Auth::user()->id);
 
         return $form;
     }

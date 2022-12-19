@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\HealthCentreDrugStock;
 use App\Models\PatientDrugRecord;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -17,7 +18,7 @@ class PatientDrugRecordController extends AdminController
      *
      * @var string
      */
-    protected $title = 'PatientDrugRecord';
+    protected $title = 'Patient drug records';
 
     /**
      * Make a grid builder.
@@ -28,16 +29,45 @@ class PatientDrugRecordController extends AdminController
     {
         $grid = new Grid(new PatientDrugRecord());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('district_id', __('District id'));
-        $grid->column('created_by', __('Created by'));
-        $grid->column('patient_id', __('Patient id'));
-        $grid->column('drug_category_id', __('Drug category id'));
-        $grid->column('drug_stock_id', __('Drug stock id'));
-        $grid->column('health_centre_id', __('Health centre id'));
-        $grid->column('district_drug_stock_id', __('District drug stock id'));
+        $grid->disableActions();
+        $grid->disableCreateButton();
+        $grid->disableBatchActions();
+        $grid->disableExport();
+
+        $grid->column('created_at', __('Date'))->display(function ($t) {
+            return Utils::my_date($t);
+        })->sortable();
+
+        $grid->column('district_id', __('District'))->display(function ($t) {
+            return $this->district->name;
+        })->sortable();
+
+        $grid->column('patient_id', __('Patient by'))
+            ->display(function () {
+                return $this->patient->name;
+            })->sortable();
+
+        $grid->column('drug_category_id', __('Drug'))->display(function ($t) {
+            return $this->drug_category->name_of_drug;
+        })->sortable();
+
+        $grid->column('drug_stock_id', __('Batch'))->display(function ($t) {
+            return $this->drug_stock->batch_number;
+        })->sortable();
+
+        $grid->column('health_centre_id', __('Health centre'))->display(function ($t) {
+            return $this->health_centre->name;
+        })->sortable();
+
+        $grid->column('district_drug_stock_id', __('District drug stock'))
+            ->display(function () {
+                return "#" . $this->district_drug_stock->id;
+            })->sortable();
+
+        $grid->column('created_by', __('Created by'))
+            ->display(function ($t) {
+                return $this->creator->name;
+            })->sortable();
 
         return $grid;
     }
@@ -97,7 +127,7 @@ class PatientDrugRecordController extends AdminController
             $stocks[$stock->id] = "$stock->id. " . $stock->drug_category->name_of_drug . " - Batch #" .
                 $stock->batch_number . ", Available Quantity: " . $stock->current_quantity_text;
         }
-        
+
 
         $form->hidden('created_by')->default(Auth::user()->id);
 

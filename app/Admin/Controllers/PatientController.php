@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Patient;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -26,10 +27,20 @@ class PatientController extends AdminController
     {
         $grid = new Grid(new Patient());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('district_id', __('District id'));
+        $grid->model()->orderBy('id', 'Desc');
+
+        $grid->disableActions();
+        $grid->disableCreateButton();
+        $grid->disableBatchActions();
+        $grid->disableExport();
+
+        $grid->column('id', __('ID'))->sortable();
+        $grid->column('created_at', __('Added'))->display(function ($t) {
+            return Utils::my_date($t);
+        })->sortable();
+        $grid->column('district_id', __('District'))->display(function ($t) {
+            return $this->district->name;
+        })->sortable();
         $grid->column('name', __('Name'));
         $grid->column('sex', __('Sex'));
         $grid->column('address', __('Address'));

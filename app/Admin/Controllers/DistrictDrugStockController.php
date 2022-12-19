@@ -36,33 +36,34 @@ class DistrictDrugStockController extends AdminController
 
         $grid->column('created_at', __('Date'))->display(function ($t) {
             return Utils::my_date($t);
-        })->sortable();  
+        })->sortable();
 
         $grid->column('district_id', __('District'))->display(function ($t) {
-            return $this->district->name; 
-        })->sortable(); 
+            return $this->district->name;
+        })->sortable();
 
         $grid->column('drug_category_id', __('Drug'))->display(function ($t) {
             return $this->drug_category->name_of_drug;
-        })->sortable(); 
+        })->sortable();
 
         $grid->column('drug_stock_id', __('Batch'))->display(function ($t) {
             return $this->drug_stock->batch_number;
-        })->sortable(); 
-  
-        $grid->column('original_quantity', __('Original quantity'))
-        ->display(function ($t) {
-            return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
-        })->sortable();  
-        $grid->column('current_quantity', __('Current quantity'))
-        ->display(function ($t) {
-            return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
         })->sortable();
 
+        $grid->column('original_quantity', __('Original quantity'))
+            ->display(function ($t) {
+                return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
+            })->sortable();
+        $grid->column('current_quantity', __('Current quantity'))
+            ->display(function ($t) {
+                return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
+            })->sortable();
+
         $grid->column('created_by', __('Created by'))
-        ->display(function ($t) {
-            return $this->creatorch->name; 
-        })->sortable(); 
+            ->display(function ($t) {
+                return $this->creator->name;
+            })->sortable();
+            
 
         return $grid;
     }
@@ -97,8 +98,16 @@ class DistrictDrugStockController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new DistrictDrugStock());
+        $drug_id = 0;
+        if (isset($_GET['drug_id'])) {
+            $drug_id =  ((int)($_GET['drug_id']));
+        }
 
+        $form = new Form(new DistrictDrugStock());
+        $form->disableReset();
+        $form->disableViewCheck();
+        $form->disableCreatingCheck();
+        $form->disableEditingCheck();
 
         $stocks = [];
         foreach (DrugStock::all() as $stock) {
@@ -116,15 +125,20 @@ class DistrictDrugStockController extends AdminController
                 . "&query_parent=0"
                 . "&model=Location"
         );
-        $form->select('district_id', 'Select District')
-            ->ajax($district_ajax_url)
-            ->rules('required');
 
 
 
         $form->select('drug_stock_id', 'Drug stock')
             ->options($stocks)
+            ->default($drug_id)
+            ->readOnly()
             ->rules('required');
+
+
+        $form->select('district_id', 'Select District')
+            ->ajax($district_ajax_url)
+            ->rules('required');
+
 
 
         $form->hidden('created_by', __('Created by'))->default(Auth::user()->id);

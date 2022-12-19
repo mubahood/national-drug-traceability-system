@@ -58,7 +58,7 @@ class DistrictDrugStock extends Model
 
     public   function district()
     {
-        return $this->belongsTo(Location::class,'district_id');
+        return $this->belongsTo(Location::class, 'district_id');
     }
 
     public   function drug_category()
@@ -70,11 +70,13 @@ class DistrictDrugStock extends Model
     {
         return $this->belongsTo(DrugStock::class);
     }
-    
+
     public   function creator()
     {
-        return $this->belongsTo(Administrator::class,'created_by');
+        return $this->belongsTo(Administrator::class, 'created_by');
     }
+
+
 
 
     public function getCurrentQuantityTextAttribute()

@@ -63,6 +63,12 @@ class DrugStockController extends AdminController
                 return  $this->drug_packaging_type_text;
             });
 
+
+        $grid->column('packaging', __('Action'))
+            ->display(function () {
+                return '<a href="' . admin_url('district-drug-stocks/create?drug_id=' . $this->id) . '" >SUPPLY TO DISTRICT</a>';
+            });
+
         $grid->column('description', __('Description'))->hide();
 
         return $grid;
