@@ -26,7 +26,7 @@ class PatientController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Patient());
-
+ 
         $grid->model()->orderBy('id', 'Desc');
 
         $grid->disableActions();

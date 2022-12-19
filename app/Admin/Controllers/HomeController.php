@@ -165,8 +165,10 @@ is_fined
         dd(count(CaseSuspectsComment::all())); */
 
         $content
-            ->title('Online Wildlife Offenders Database - Dashboard')
+            ->title('National Drug Authority - Drugs Tracking & Tracing system')
             ->description('Hello ' . Auth::user()->name . "!");
+
+        return $content;
 
         $content->row(function (Row $row) {
             $row->column(4, function (Column $column) {

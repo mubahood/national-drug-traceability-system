@@ -5,10 +5,12 @@ namespace App\Admin\Controllers;
 use App\Models\DrugCategory;
 use App\Models\DrugStock;
 use App\Models\Utils;
+use Encore\Admin\Admin;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\Auth;
 
 class DrugStockController extends AdminController
 {
@@ -34,6 +36,7 @@ class DrugStockController extends AdminController
 
         $s->save();
         die("done"); */
+
         $grid->model()->orderBy('id', 'Desc');
         $grid->column('created_at', __('Added'))->display(function ($t) {
             return Utils::my_date($t);
@@ -64,10 +67,17 @@ class DrugStockController extends AdminController
             });
 
 
-        $grid->column('packaging', __('Action'))
-            ->display(function () {
-                return '<a href="' . admin_url('district-drug-stocks/create?drug_id=' . $this->id) . '" >SUPPLY TO DISTRICT</a>';
-            });
+
+        $grid->disableActions();
+        $u = Auth::user();
+        if (!$u->isRole('nda-admin')) {
+            $grid->disableCreateButton();
+        } else {
+            $grid->column('packaging', __('Action'))
+                ->display(function () {
+                    return '<a href="' . admin_url('district-drug-stocks/create?drug_id=' . $this->id) . '" >SUPPLY TO DISTRICT</a>';
+                });
+        }
 
         $grid->column('description', __('Description'))->hide();
 

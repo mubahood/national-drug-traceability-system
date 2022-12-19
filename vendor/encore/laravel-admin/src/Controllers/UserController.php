@@ -85,20 +85,19 @@ Edit Edit
         $grid->column('district_id', 'District')->display(function ($id) {
             return Utils::get(Location::class, $id)->name_text;
         })->sortable();
-        $grid->column('sub_county_id', 'Sub county')->display(function ($id) {
+
+       /*  $grid->column('sub_county_id', 'Sub county')->display(function ($id) {
             return Utils::get(Location::class, $id)->name_text;
-        })->sortable();
+        })->sortable(); */
 
 
 
         $grid->column('email', 'email address');
         $grid->column('roles', trans('admin.roles'))->pluck('name')->label();
-        $grid->column('created_at', 'Registered')->display(function ($f) {
+        /*  $grid->column('created_at', 'Registered')->display(function ($f) {
             return Utils::my_date($f);
-        });
-        $grid->column('cases', 'Cases Reported')->display(function () {
-            return count($this->cases);
-        });
+        }); */
+
 
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
@@ -204,8 +203,8 @@ Edit Edit
         $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
         //$form->multipleSelect('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
 
-        $form->display('created_at', trans('admin.created_at'));
-        $form->display('updated_at', trans('admin.updated_at'));
+/*         $form->display('created_at', trans('admin.created_at'));
+        $form->display('updated_at', trans('admin.updated_at')); */
 
         $form->saving(function (Form $form) {
             if ($form->password && $form->model()->password != $form->password) {

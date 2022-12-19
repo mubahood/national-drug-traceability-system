@@ -14,5 +14,5 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>Powered by <a href="javscript:;">8Tech consults</a></strong>
+    <strong>Powered by <a href="javscript:;">Uganda National Drug Authority</a></strong>
 </footer>

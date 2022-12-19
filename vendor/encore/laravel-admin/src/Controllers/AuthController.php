@@ -52,6 +52,13 @@ class AuthController extends Controller
             return $this->sendLoginResponse($request);
         }
 
+        if ($this->guard()->attempt([
+            'email' => $request->username,
+            'password' => $request->password,
+        ], $remember)) {
+            return $this->sendLoginResponse($request);
+        }
+
         return back()->withInput()->withErrors([
             $this->username() => $this->getFailedLoginMessage(),
         ]);

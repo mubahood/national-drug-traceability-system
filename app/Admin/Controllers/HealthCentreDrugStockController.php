@@ -28,12 +28,14 @@ class HealthCentreDrugStockController extends AdminController
      */
     protected function grid()
     {
+
+
         $grid = new Grid(new HealthCentreDrugStock());
         $grid->disableActions();
         $grid->disableCreateButton();
         $grid->disableBatchActions();
         $grid->disableExport();
-
+        $grid->model()->orderBy('id', 'Desc');
 
         $grid->column('created_at', __('Date'))->display(function ($t) {
             return Utils::my_date($t);
@@ -66,6 +68,26 @@ class HealthCentreDrugStockController extends AdminController
             ->display(function ($t) {
                 return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
             })->sortable();
+
+        $grid->column('current_quantity', __('Current quantity (By Packaging)'))
+            ->display(function ($t) {
+                return Utils::quantity_convertor_2($this->current_quantity, $this->drug_stock);
+            })->sortable();
+
+
+
+        $grid->disableActions();
+        $u = Auth::user();
+
+        if ($u->isRole('medical-officer')) {
+            $grid->column('packaging', __('Action'))
+                ->display(function () {
+                    return '<a href="' . admin_url('patient-drug-records/create?health_centre_drug_stock_id=' . $this->id) . '" >SUPPLY TO PATIENT</a>';
+                });
+        }
+
+
+
 
         return $grid;
     }
@@ -110,8 +132,20 @@ class HealthCentreDrugStockController extends AdminController
         $data->save();
  */
 
+
         $form = new Form(new HealthCentreDrugStock());
         $stocks = [];
+        $district_stock_id = 0;
+        $form->disableReset();
+        $form->disableViewCheck();
+        $form->disableCreatingCheck();
+        $form->disableEditingCheck();
+
+        if (isset($_GET['district_stock_id'])) {
+            $district_stock_id =  ((int)($_GET['district_stock_id']));
+        }
+
+
         foreach (DistrictDrugStock::all() as $stock) {
             if ($stock->current_quantity < 1) {
                 continue;
@@ -125,8 +159,11 @@ class HealthCentreDrugStockController extends AdminController
             $centres[$item->id] = "$item->id " . $item->name;
         }
 
+
         $form->select('district_drug_stock_id', 'Drug stock')
             ->options($stocks)
+            ->default($district_stock_id)
+            ->readOnly()
             ->rules('required');
 
         $form->select('health_centre_id', 'Health centre')

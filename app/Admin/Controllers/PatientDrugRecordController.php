@@ -54,6 +54,9 @@ class PatientDrugRecordController extends AdminController
         $grid->column('drug_stock_id', __('Batch'))->display(function ($t) {
             return $this->drug_stock->batch_number;
         })->sortable();
+        $grid->column('quantity', __('Quantity'))->display(function ($t) {
+            return Utils::quantity_convertor_2($this->quantity, $this->drug_stock);
+        })->label()->sortable();
 
         $grid->column('health_centre_id', __('Health centre'))->display(function ($t) {
             return $this->health_centre->name;
@@ -119,15 +122,34 @@ class PatientDrugRecordController extends AdminController
 
         $form = new Form(new PatientDrugRecord());
 
+        $health_centre_drug_stock_id = 0;
+        if (isset($_GET['health_centre_drug_stock_id'])) {
+            $health_centre_drug_stock_id =  ((int)($_GET['health_centre_drug_stock_id']));
+        }
+
+
         $stocks = [];
         foreach (HealthCentreDrugStock::all() as $stock) {
             if ($stock->current_quantity < 1) {
                 continue;
             }
             $stocks[$stock->id] = "$stock->id. " . $stock->drug_category->name_of_drug . " - Batch #" .
-                $stock->batch_number . ", Available Quantity: " . $stock->current_quantity_text;
+                $stock->batch_number . ", Available Quantity: "
+                . Utils::quantity_convertor_2($stock->current_quantity, $stock->drug_stock);
         }
 
+
+        $form->select('health_centre_drug_stock_id', 'Select drug')
+            ->options($stocks)
+            ->readOnly()
+            ->default($health_centre_drug_stock_id)
+            ->rules('required');
+
+        $form->decimal('quantity', 'Drug quantity')
+            ->help('Number of tablets for solid drugs OR Number of bottles/bags for liquid drugs or syrups.')
+            ->rules('required');
+
+        $form->divider('Patient information');
 
         $form->hidden('created_by')->default(Auth::user()->id);
 
@@ -175,14 +197,6 @@ class PatientDrugRecordController extends AdminController
             })
             ->rules('required');
 
-        $form->divider();
-        $form->select('health_centre_drug_stock_id', 'Select drug')
-            ->options($stocks)
-            ->rules('required');
-
-        $form->decimal('quantity', 'Drug quantity')
-            ->help('Number of tablets for solid drugs OR Number of bottles/bags for liquid drugs or syrups.')
-            ->rules('required');
 
 
 

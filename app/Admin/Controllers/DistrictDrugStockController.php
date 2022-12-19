@@ -33,6 +33,7 @@ class DistrictDrugStockController extends AdminController
         $grid->disableCreateButton();
         $grid->disableBatchActions();
         $grid->disableExport();
+        $grid->model()->orderBy('id', 'Desc');
 
         $grid->column('created_at', __('Date'))->display(function ($t) {
             return Utils::my_date($t);
@@ -54,6 +55,8 @@ class DistrictDrugStockController extends AdminController
             ->display(function ($t) {
                 return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
             })->sortable();
+
+
         $grid->column('current_quantity', __('Current quantity'))
             ->display(function ($t) {
                 return  Utils::quantity_convertor($t, $this->drug_stock->drug_state);
@@ -63,7 +66,23 @@ class DistrictDrugStockController extends AdminController
             ->display(function ($t) {
                 return $this->creator->name;
             })->sortable();
-            
+
+
+
+
+        $grid->disableActions();
+        $u = Auth::user();
+    
+
+        if ($u->isRole('district-officer')) {
+            $grid->column('packaging', __('Action'))
+                ->display(function () {
+                    return '<a href="' . admin_url('health-centre-drug-stocks/create?district_stock_id=' . $this->id) . '" >SUPPLY TO HEALTH CENTRE</a>';
+                });
+        }
+
+
+
 
         return $grid;
     }
